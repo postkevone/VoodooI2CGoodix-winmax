@@ -548,21 +548,23 @@ bool VoodooI2CGoodixEventDriver::start(IOService* provider) {
 
     return true;
 }
-
-IOFramebuffer* VoodooI2CGoodixEventDriver::getFramebuffer() {
-    IODisplay* display = NULL;
-    IOFramebuffer* framebuffer = NULL;
+    
+MyIOFramebuffer* VoodooI2CGoodixEventDriver::getFramebuffer() {
+    IORegistryEntry* display = NULL;
+    MyIOFramebuffer* framebuffer = NULL;
 
     OSDictionary *match = serviceMatching("IODisplay");
     OSIterator *iterator = getMatchingServices(match);
 
     if (iterator) {
-        display = OSDynamicCast(IODisplay, iterator->getNextObject());
+        display = OSDynamicCast(IORegistryEntry, iterator->getNextObject());
 
         if (display) {
             IOLog("%s::Got active display\n", getName());
 
-            framebuffer = OSDynamicCast(IOFramebuffer, display->getParentEntry(gIOServicePlane)->getParentEntry(gIOServicePlane));
+            IORegistryEntry *entry = display->getParentEntry(gIOServicePlane)->getParentEntry(gIOServicePlane);
+                if (entry)
+                    framebuffer = static_cast<MyIOFramebuffer*>(entry->metaCast("IOFramebuffer"));
 
             if (framebuffer) {
                 IOLog("%s::Got active framebuffer\n", getName());

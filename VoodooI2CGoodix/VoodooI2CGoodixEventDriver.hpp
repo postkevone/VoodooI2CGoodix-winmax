@@ -33,6 +33,8 @@
 
 #include "../../../Dependencies/helpers.hpp"
 
+#include "MyIOFramebuffer.hpp"
+
 #define FINGER_LIFT_DELAY   50
 #define CLICK_DELAY         100
 #define RIGHT_CLICK_DELAY   500
@@ -176,7 +178,7 @@ class EXPORT VoodooI2CGoodixEventDriver : public IOHIDEventService {
 
     /* Get the active framebuffer
      */
-    IOFramebuffer* getFramebuffer();
+    MyIOFramebuffer* getFramebuffer();
 
     /* Rotate coordinates to match current framebuffer's rotation
      *
@@ -212,7 +214,7 @@ private:
     IOWorkLoop *work_loop;
     IOTimerEventSource *liftTimerSource;
     IOTimerEventSource *clickTimerSource;
-    IOFramebuffer* activeFramebuffer = NULL;
+    MyIOFramebuffer* activeFramebuffer = NULL;
 
     UInt8 currentRotation;
 
